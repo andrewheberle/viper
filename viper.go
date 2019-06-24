@@ -32,6 +32,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"net/url"
 
 	yaml "gopkg.in/yaml.v2"
 
@@ -827,6 +828,17 @@ func GetSizeInBytes(key string) uint { return v.GetSizeInBytes(key) }
 func (v *Viper) GetSizeInBytes(key string) uint {
 	sizeStr := cast.ToString(v.Get(key))
 	return parseSizeInBytes(sizeStr)
+}
+
+// GetURL returns the returns the value associated with the key as *url.URL
+func GetURL(key string) *url.URL { return v.GetTime(key) }
+func (v *Viper) GetURL(key string) *net.URL {
+	u, err := url.Parse(v.GetString(key))
+	if err != nil {
+		return nil
+	}
+	
+	return u
 }
 
 // UnmarshalKey takes a single key and unmarshals it into a Struct.
